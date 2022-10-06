@@ -1,7 +1,7 @@
 <template>
   <div class="header flex-container">
     <div>
-      <h1>Checkers</h1>
+      <h1 class="text-5xl font-bold underline">Checkers</h1>
     </div>
     <div class="offered">
       <h2>{{currentDate()}}</h2>
