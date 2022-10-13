@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="item1">
-      <h1>Pick a date:</h1>
+      <h1 class="underline btn">Pick a date:</h1>
       <input type="date" id="start" name="Date">
       <h1>Pick a team:</h1>
       <ul>
@@ -41,7 +41,7 @@
     </div>
     <div class="item3">
       <h1>Competition:</h1>
-      <p>
+      <p class="btn ">
         In the next round of competition our A-team will play the 'tossers' at Purmerend.
         First position in the national league is at stake! An extra practice session is planned for Wednesday.
         Let's all support our team!
