@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory} from "vue-router";
 import HomeWelcome from "@/components/HomeWelcome";
 import GameOverview from "@/components/Games/GameOverview";
+import CheckerBoard from "@/components/board/checkerBoard";
 
 const routes = [
     {
@@ -9,6 +10,9 @@ const routes = [
     {
         path: '/game', name: 'Game overview', component: GameOverview
     },
+    {
+        path: '/board', name: 'Checkerboard', component: CheckerBoard
+    }
 ]
 
 const index = createRouter({
