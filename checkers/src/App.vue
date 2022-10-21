@@ -1,5 +1,3 @@
-app.vue
-
 <template>
   <HomeHeader/>
   <NavBar/>
@@ -7,6 +5,7 @@ app.vue
 </template>
 
 <script>
+
 import NavBar from './components/NavBar.vue'
 import HomeHeader from './components/HomeHeader.vue'
 
