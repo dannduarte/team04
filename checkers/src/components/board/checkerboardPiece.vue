@@ -2,27 +2,26 @@
 export default {
   name: "checkerboardPiece",
   props: [
-    'squareName'
-  ]
+      'squareName',
+      'pieces',
+      'className'
+  ],
+  methods:{
+    test() {
+      console.log(this.pieces[17][1])
+      console.log(this.pieces[1].indexOf("r1-sq5_2"))
+    }
+  }
 }
 
 </script>
 
 <template>
-  <g translate="yes">
-    <rect class="white" x="0" y="0" width="40" height="40" :id="this.squareName + '_1'"/>
-    <rect class="black" x="40" y="0" width="40" height="40" :id="this.squareName + '_2'"/>
-    <rect class="black" x="0" y="40" width="40" height="40" :id="this.squareName + '_3'"/>
-    <rect class="white" x="40" y="40" width="40" height="40" :id="this.squareName + '_4'"/>
-  </g>
+  <rect class="black" x="40" y="0" width="40" height="40"></rect>
 </template>
 
 <style scoped>
 .black {
   fill: rgb(0, 0, 0);
-}
-
-.white {
-  fill: rgb(255, 255, 255);
 }
 </style>
