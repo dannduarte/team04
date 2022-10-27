@@ -1,7 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
     mode: 'jit',
-    purge: ["./src/components/Games/*.{html,js,vue}",
+    content: [
+        "./src/components/Games/*.{html,js,vue}",
+        "./src/components/Auth/*.{html,js,vue}",
+        "./src/components/Board/*.{html,js,vue}",
         "./src/components/*.{html,js,vue}",
         "./src/App.vue"],
 
