@@ -2,7 +2,6 @@ import { createRouter, createWebHashHistory} from "vue-router";
 import HomeWelcome from "@/components/HomeWelcome";
 import LoginAccount from "@/components/Auth/LoginAccount";
 import RegisterAccount from "@/components/Auth/RegisterAccount";
-import GameOverview from "@/components/Games/GameOverview";
 import CheckerBoard from "@/components/board/checkerBoard";
 
 const routes = [

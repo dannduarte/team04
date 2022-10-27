@@ -30,6 +30,7 @@ yarn-error.log*
 
 # CSS
 **/.sass-cache/
+**/dist/output.css
 
 # angular e2e
 **/e2e/*.js
