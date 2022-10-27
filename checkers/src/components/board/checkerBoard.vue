@@ -90,6 +90,30 @@ export default {
     <rect v-for="i in 10" :key="i" :class="{'black':i%2===1,'white':i%2===0}" class="square" :x="4*(i-1)+'vw'" y="36vw" :id="'r10_sq'+i"/>
     <circle v-for="i in 5" :key="i" :class="changePieceClass('piece'+ (45+i))" :cx="2 + (8*(i-1)) + 'vw'" cy="38vw" :id="'piece'+ (45+i)"/>
   </svg>
+  <!--  Rules modal popup-->
+  <label for="my-modal-4" class="btn modal-button bg-primary hover:bg-primary-focus ml-20">Rules</label>
+  <input type="checkbox" id="my-modal-4" class="modal-toggle" />
+  <label for="my-modal-4" class="modal cursor-pointer">
+    <label class="modal-box relative w-11/12 max-w-5xl" for="">
+      <h2>Rules</h2><br>
+      1. Leg het dambord zo, dat het hoekveld linksonder een donker vakje is. Er wordt op de donkere velden gedamd.<br>
+      2. Wit begint en doet de eerste zet.<br>
+      3. Een schijf wordt één vakje schuin vooruit geschoven.<br>
+      4. Een schijf kan vooruit en achteruit slaan.<br>
+      5. Een schijf die aan de overkant van het dambord komt, wordt een dam. Let op: een schijf die tijdens het slaan de overkant van het dambord passeert maar weer terug moet om nog meer schijven te slaan, blijft een schijf.<br>
+      6. Een dam wordt één of meer vakjes schuin vooruit of schuin achteruit geschoven.<br>
+      7. Een dam kan vooruit en achteruit slaan. Je hoeft de dam na de slag niet vlak achter de laatste geslagen schijf te zetten.<br>
+      8. Slaan is verplicht.<br>
+      9. Meerslag gaat voor.<br>
+      10. Als je met een dam en met een schijf evenveel stukken kunt slaan, mag je kiezen. Dus: damslag gaat niet voor!<br>
+      11. Pas na het slaan mag je de geslagen stukken van het bord pakken.<br>
+      12. Tijdens het slaan mag je niet twee keer over hetzelfde stuk. Wel twee keer over hetzelfde lege veld.<br>
+      13. Aanraken is zetten: als je een dam of schijf aanraakt waar je een reglementaire zet mee kunt doen, dan moet je met dát stuk een zet doen.<br>
+      14. Als je tegenstander een zet doet die niet volgens de spelregels is (bijvoorbeeld hij vergeet te slaan, of hij slaat te weinig stukken), dan is het sportief om dat tegen hem te zeggen en hem te laten terugzetten. Maar je mag ook gewoon doorspelen.<br>
+      15. Wie geen zet meer kan doen, heeft de partij verloren.<br>
+      16. Als niemand meer kan winnen, dan is het remise (gelijkspel). Let op: het kan ook remise zijn als jij en je tegenstander niet hetzelfde aantal stukken hebben!<br>
+    </label>
+  </label>
 </template>
 
 <style scoped>
