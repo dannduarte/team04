@@ -3,13 +3,16 @@
 Project development environment for HBO-ICT Software Engineering in Semester-3
 
 ## Install yarn
-`npm install --global yarn`
+Execute in terminal `npm install --global yarn`
+
+## Install dependencies
+Execute in terminal `cd checkers` and `yarn install`
 
 ## Start the project 
 Execute in terminal `cd checkers` and `yarn serve`
 
 ## Rebuild css
-`npx tailwindcss -i ./src/Main.css -o ./dist/output.css --watch`
+Execute in terminal `cd checkers` and `npx tailwindcss -i ./src/Main.css -o ./dist/output.css --watch`
 
 ## Tech usage in this project
 - Vue.js

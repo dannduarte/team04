@@ -1,95 +1,202 @@
 <script>
+import $ from 'jquery'
 export default {
   name: "checkerBoard",
   data() {
     return {
-      pieces:
-          [
-            ["piece1", "black piece"],
-            ["piece2", "black piece"],
-            ["piece3", "black piece"],
-            ["piece4", "black piece"],
-            ["piece5", "black piece"],
-            ["piece6", "black piece"],
-            ["piece7", "black piece"],
-            ["piece8", "black piece"],
-            ["piece9", "black piece"],
-            ["piece10", "black piece"],
-            ["piece11", "black piece"],
-            ["piece12", "black piece"],
-            ["piece13", "black piece"],
-            ["piece14", "black piece"],
-            ["piece15", "black piece"],
-            ["piece16", "black piece"],
-            ["piece17", "black piece"],
-            ["piece18", "black piece"],
-            ["piece19", "black piece"],
-            ["piece20", "black piece"],
-            ["piece21", "none"],
-            ["piece22", "none"],
-            ["piece23", "none"],
-            ["piece24", "none"],
-            ["piece25", "none"],
-            ["piece26", "none"],
-            ["piece27", "none"],
-            ["piece28", "none"],
-            ["piece29", "none"],
-            ["piece30", "none"],
-            ["piece31", "white"],
-            ["piece32", "white"],
-            ["piece33", "white"],
-            ["piece34", "white"],
-            ["piece35", "white"],
-            ["piece36", "white"],
-            ["piece37", "white"],
-            ["piece38", "white"],
-            ["piece39", "white"],
-            ["piece40", "white"],
-            ["piece41", "white"],
-            ["piece42", "white"],
-            ["piece43", "white"],
-            ["piece44", "white"],
-            ["piece45", "white"],
-            ["piece46", "white"],
-            ["piece47", "white"],
-            ["piece48", "white"],
-            ["piece49", "white"],
-            ["piece50", "white"]
-          ]
-      ,
+      gameBoard: [
+        [0, 1, 0, 1, 0, 1, 0, 1],
+        [1, 0, 1, 0, 1, 0, 1, 0],
+        [0, 1, 0, 1, 0, 1, 0, 1],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [2, 0, 2, 0, 2, 0, 2, 0],
+        [0, 2, 0, 2, 0, 2, 0, 2],
+        [2, 0, 2, 0, 2, 0, 2, 0]
+      ],
+      pieces: [],
+      tiles: [],
+
     }
   },
   methods: {
-    changePieceClass(id){
-      return this.pieces.find((val)=>val[0]===id)[1];
+    dist(x1, y1, x2, y2) {
+      return Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2));
+    },
+
+    Piece(element, position) {
+      // when jump exist, regular move is not allowed
+      // since there is no jump at round 1, all pieces are allowed to move initially
+      this.allowedtomove = true;
+      //linked DOM element
+      this.element = element;
+      //positions on gameBoard array in format row, column
+      this.position = position;
+      //which player's piece i it
+      this.player = '';
+      //figure out player by piece id
+      if (this.element.attr("id") < 12)
+        this.player = 1;
+      else
+        this.player = 2;
+      //makes object a king
+      this.king = false;
+      this.makeKing = function () {
+        this.element.css("backgroundImage", "url('img/king" + this.player + ".png')");
+        this.king = true;
+      }
+      //moves the piece
+      this.move = function (tile) {
+        this.element.removeClass('selected');
+        if (!Board.isValidPlacetoMove(tile.position[0], tile.position[1])) return false;
+        //make sure piece doesn't go backwards if it's not a king
+        if (this.player == 1 && this.king == false) {
+          if (tile.position[0] < this.position[0]) return false;
+        } else if (this.player == 2 && this.king == false) {
+          if (tile.position[0] > this.position[0]) return false;
+        }
+        //remove the mark from Board.board and put it in the new spot
+        Board.board[this.position[0]][this.position[1]] = 0;
+        Board.board[tile.position[0]][tile.position[1]] = this.player;
+        this.position = [tile.position[0], tile.position[1]];
+        //change the css using board's dictionary
+        this.element.css('top', Board.dictionary[this.position[0]]);
+        this.element.css('left', Board.dictionary[this.position[1]]);
+        //if piece reaches the end of the row on opposite side crown it a king (can move all directions)
+        if (!this.king && (this.position[0] == 0 || this.position[0] == 7))
+          this.makeKing();
+        return true;
+      };
+
+      //tests if piece can jump anywhere
+      this.canJumpAny = function () {
+        return (this.canOpponentJump([this.position[0] + 2, this.position[1] + 2]) ||
+            this.canOpponentJump([this.position[0] + 2, this.position[1] - 2]) ||
+            this.canOpponentJump([this.position[0] - 2, this.position[1] + 2]) ||
+            this.canOpponentJump([this.position[0] - 2, this.position[1] - 2]))
+      };
+
+      //tests if an opponent jump can be made to a specific place
+      this.canOpponentJump = function (newPosition) {
+        //find what the displacement is
+        var dx = newPosition[1] - this.position[1];
+        var dy = newPosition[0] - this.position[0];
+        //make sure object doesn't go backwards if not a king
+        if (this.player == 1 && this.king == false) {
+          if (newPosition[0] < this.position[0]) return false;
+        } else if (this.player == 2 && this.king == false) {
+          if (newPosition[0] > this.position[0]) return false;
+        }
+        //must be in bounds
+        if (newPosition[0] > 7 || newPosition[1] > 7 || newPosition[0] < 0 || newPosition[1] < 0) return false;
+        //middle tile where the piece to be conquered sits
+        var tileToCheckx = this.position[1] + dx / 2;
+        var tileToChecky = this.position[0] + dy / 2;
+        if (tileToCheckx > 7 || tileToChecky > 7 || tileToCheckx < 0 || tileToChecky < 0) return false;
+        //if there is a piece there and there is no piece in the space after that
+        if (!Board.isValidPlacetoMove(tileToChecky, tileToCheckx) && Board.isValidPlacetoMove(newPosition[0], newPosition[1])) {
+          //find which object instance is sitting there
+          for (let pieceIndex in pieces) {
+            if (pieces[pieceIndex].position[0] == tileToChecky && pieces[pieceIndex].position[1] == tileToCheckx) {
+              if (this.player != pieces[pieceIndex].player) {
+                //return the piece sitting there
+                return pieces[pieceIndex];
+              }
+            }
+          }
+        }
+        return false;
+      };
+
+      this.opponentJump = function (tile) {
+        var pieceToRemove = this.canOpponentJump(tile.position);
+        //if there is a piece to be removed, remove it
+        if (pieceToRemove) {
+          pieceToRemove.remove();
+          return true;
+        }
+        return false;
+      };
+
+      this.remove = function () {
+        //remove it and delete it from the gameboard
+        this.element.css("display", "none");
+        if (this.player == 1) {
+          $('#player2').append("<div class='capturedPiece'></div>");
+          Board.score.player2 += 1;
+        }
+        if (this.player == 2) {
+          $('#player1').append("<div class='capturedPiece'></div>");
+          Board.score.player1 += 1;
+        }
+        Board.board[this.position[0]][this.position[1]] = 0;
+        //reset position so it doesn't get picked up by the for loop in the canOpponentJump method
+        this.position = [];
+        var playerWon = this.Board.checkifAnybodyWon();
+        if (playerWon) {
+          $('#winner').html("Player " + playerWon + " has won!");
+        }
+      }
+    },
+
+    Tile(element, position) {
+      //linked DOM element
+      this.element = element;
+      //position in gameboard
+      this.position = position;
+      //if tile is in range from the piece
+      this.inRange = function (piece) {
+        for (let k of this.pieces)
+          if (k.position[0] == this.position[0] && k.position[1] == this.position[1]) return 'wrong';
+        if (!piece.king && piece.player == 1 && this.position[0] < piece.position[0]) return 'wrong';
+        if (!piece.king && piece.player == 2 && this.position[0] > piece.position[0]) return 'wrong';
+        if (this.dist(this.position[0], this.position[1], piece.position[0], piece.position[1]) == Math.sqrt(2)) {
+          //regular move
+          return 'regular';
+        } else if (this.dist(this.position[0], this.position[1], piece.position[0], piece.position[1]) == 2 * Math.sqrt(2)) {
+          //jump move
+          return 'jump';
+        }
+      };
     }
   }
 }
 </script>
 
 <template>
-  <svg width="40.4vw" height="40.4vw">
-    <rect v-for="i in 10" :key="i" :class="{'black':i%2===0,'white':i%2===1}" class="square" :x="4*(i-1)+'vw'" y="0" :id="'r1_sq'+i"/>
-    <circle v-for="i in 5" :key="i" :class="changePieceClass('piece'+i)" :cx="6 + (8*(i-1)) + 'vw'" cy="2vw" :id="'piece' +i"/>
-    <rect v-for="i in 10" :key="i" :class="{'black':i%2===1,'white':i%2===0}" class="square" :x="4*(i-1)+'vw'" y="4vw" :id="'r2_sq'+i"/>
-    <circle v-for="i in 5" :key="i" :class="changePieceClass('piece'+ (5+i))" :cx="2 + (8*(i-1)) + 'vw'" cy="6vw" :id="'piece'+ (5+i)"/>
-    <rect v-for="i in 10" :key="i" :class="{'black':i%2===0,'white':i%2===1}" class="square" :x="4*(i-1)+'vw'" y="8vw" :id="'r3_sq'+i"/>
-    <circle v-for="i in 5" :key="i" :class="changePieceClass('piece'+ (10+i))" :cx="6 + (8*(i-1)) + 'vw'" cy="10vw" :id="'piece'+ (10+i)"/>
-    <rect v-for="i in 10" :key="i" :class="{'black':i%2===1,'white':i%2===0}" class="square" :x="4*(i-1)+'vw'" y="12vw" :id="'r4_sq'+i"/>
-    <circle v-for="i in 5" :key="i" :class="changePieceClass('piece'+ (15+i))" :cx="2 + (8*(i-1)) + 'vw'" cy="14vw" :id="'piece'+ (15+i)"/>
-    <rect v-for="i in 10" :key="i" :class="{'black':i%2===0,'white':i%2===1}" class="square" :x="4*(i-1)+'vw'" y="16vw" :id="'r5_sq'+i"/>
-    <circle v-for="i in 5" :key="i" :class="changePieceClass('piece'+ (20+i))" :cx="6 + (8*(i-1)) + 'vw'" cy="18vw" :id="'piece'+ (20+i)"/>
-    <rect v-for="i in 10" :key="i" :class="{'black':i%2===1,'white':i%2===0}" class="square" :x="4*(i-1)+'vw'" y="20vw" :id="'r6_sq'+i"/>
-    <circle v-for="i in 5" :key="i" :class="changePieceClass('piece'+ (25+i))" :cx="2 + (8*(i-1)) + 'vw'" cy="22vw" :id="'piece'+ (25+i)"/>
-    <rect v-for="i in 10" :key="i" :class="{'black':i%2===0,'white':i%2===1}" class="square" :x="4*(i-1)+'vw'" y="24vw" :id="'r7_sq'+i"/>
-    <circle v-for="i in 5" :key="i" :class="changePieceClass('piece'+ (30+i))" :cx="6 + (8*(i-1)) + 'vw'" cy="26vw" :id="'piece'+ (30+i)"/>
-    <rect v-for="i in 10" :key="i" :class="{'black':i%2===1,'white':i%2===0}" class="square" :x="4*(i-1)+'vw'" y="28vw" :id="'r8_sq'+i"/>
-    <circle v-for="i in 5" :key="i" :class="changePieceClass('piece'+ (35+i))" :cx="2 + (8*(i-1)) + 'vw'" cy="30vw" :id="'piece'+ (35+i)"/>
-    <rect v-for="i in 10" :key="i" :class="{'black':i%2===0,'white':i%2===1}" class="square" :x="4*(i-1)+'vw'" y="32vw" :id="'r9_sq'+i"/>
-    <circle v-for="i in 5" :key="i" :class="changePieceClass('piece'+ (40+i))" :cx="6 + (8*(i-1)) + 'vw'" cy="34vw" :id="'piece'+ (40+i)"/>
-    <rect v-for="i in 10" :key="i" :class="{'black':i%2===1,'white':i%2===0}" class="square" :x="4*(i-1)+'vw'" y="36vw" :id="'r10_sq'+i"/>
-    <circle v-for="i in 5" :key="i" :class="changePieceClass('piece'+ (45+i))" :cx="2 + (8*(i-1)) + 'vw'" cy="38vw" :id="'piece'+ (45+i)"/>
-  </svg>
+  <div class="column">
+    <div class="info">
+      <h1>Checkers</h1>
+      <hr>
+      <p>Made by codethejason for <a href="http://fossasia.org">FOSSASIA</a> 2015.</p>
+    </div>
+    <div class="stats">
+      <h2>Game Statistics</h2>
+      <div class="wrapper">
+        <div id="player1">
+          <h3>Player 1 (Top)</h3>
+        </div>
+        <div id="player2">
+          <h3>Player 2 (Bottom)</h3>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+      <div class="turn"></div>
+      <span id="winner"></span>
+      <button id="cleargame">Reset Game</button>
+    </div>
+  </div>
+  <div class="column">
+    <div id="board">
+      <div class="tiles"></div>
+      <div class="pieces">
+        <div class="player1pieces">
+        </div>
+        <div class="player2pieces">
+        </div>
+      </div>
+    </div>
+  </div>
   <!--  Rules modal popup-->
   <label for="my-modal-4" class="btn modal-button bg-primary hover:bg-primary-focus ml-20">Rules</label>
   <input type="checkbox" id="my-modal-4" class="modal-toggle" />
