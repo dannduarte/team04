@@ -58,31 +58,15 @@
   </label>
 
   <svg width="40.4vw" height="40.4vw">
-    <rect v-for="i in 10" :key="i" :class="{'black':i%2===0,'white':i%2===1}" class="square" :x="4*(i-1)+'vw'" y="0" :id="'sq'+ i"/>
-    <circle v-for="i in 5" :key="i" class="bPiece" :cx="6 + (8*(i-1)) + 'vw'" cy="2vw" :id="'piece' +i"/>
-    <rect v-for="i in 10" :key="i" :class="{'black':i%2===1,'white':i%2===0}" class="square" :x="4*(i-1)+'vw'" y="4vw" :id="'sq'+ (i+10)"/>
-    <circle v-for="i in 5" :key="i" class="bPiece" :cx="2 + (8*(i-1)) + 'vw'" cy="6vw" :id="'piece'+ (5+i)"/>
-    <rect v-for="i in 10" :key="i" :class="{'black':i%2===0,'white':i%2===1}" class="square" :x="4*(i-1)+'vw'" y="8vw" :id="'sq'+ (i+20)"/>
-    <circle v-for="i in 5" :key="i" class="bPiece" :cx="6 + (8*(i-1)) + 'vw'" cy="10vw" :id="'piece'+ (10+i)"/>
-    <rect v-for="i in 10" :key="i" :class="{'black':i%2===1,'white':i%2===0}" class="square" :x="4*(i-1)+'vw'" y="12vw" :id="'sq'+ (i+30)"/>
-    <circle v-for="i in 5" :key="i" class="bPiece" :cx="2 + (8*(i-1)) + 'vw'" cy="14vw" :id="'piece'+ (15+i)"/>
-    <rect v-for="i in 10" :key="i" :class="{'black':i%2===0,'white':i%2===1}" class="square" :x="4*(i-1)+'vw'" y="16vw" :id="'sq'+ (i+40)"/>
-    <rect v-for="i in 10" :key="i" :class="{'black':i%2===1,'white':i%2===0}" class="square" :x="4*(i-1)+'vw'" y="20vw" :id="'sq'+ (i+50)"/>
-    <rect v-for="i in 10" :key="i" :class="{'black':i%2===0,'white':i%2===1}" class="square" :x="4*(i-1)+'vw'" y="24vw" :id="'sq'+ (i+60)"/>
-    <circle v-for="i in 5" :key="i" class="wPiece" :cx="6 + (8*(i-1)) + 'vw'" cy="26vw" :id="'piece'+ (20+i)"/>
-    <rect v-for="i in 10" :key="i" :class="{'black':i%2===1,'white':i%2===0}" class="square" :x="4*(i-1)+'vw'" y="28vw" :id="'sq'+ (i+70)"/>
-    <circle v-for="i in 5" :key="i" class="wPiece" :cx="2 + (8*(i-1)) + 'vw'" cy="30vw" :id="'piece'+ (25+i)"/>
-    <rect v-for="i in 10" :key="i" :class="{'black':i%2===0,'white':i%2===1}" class="square" :x="4*(i-1)+'vw'" y="32vw" :id="'sq'+ (i+80)"/>
-    <circle v-for="i in 5" :key="i" class="wPiece" :cx="6 + (8*(i-1)) + 'vw'" cy="34vw" :id="'piece'+ (30+i)"/>
-    <rect v-for="i in 10" :key="i" :class="{'black':i%2===1,'white':i%2===0}" class="square" :x="4*(i-1)+'vw'" y="36vw" :id="'sq'+ (i+90)"/>
-    <circle v-for="i in 5" :key="i" class="wPiece" :cx="2 + (8*(i-1)) + 'vw'" cy="38vw" :id="'piece'+ (35+i)"/>
+    <rect v-for="(tile,index) of tiles" :key="index" :class="tile.class" class="square" :x="tile.position[0]" :y="tile.position[1]" :id="tile.element"/>
+    <circle v-for="(piece,index) of pieces" :key="index" :class="piece.pieceClass" :cx="piece.position[0]" :cy="piece.position[1]" :id="piece.element"/>
   </svg>
 
 </template>
 
 <script>
 import { Piece } from "@/models/piece.js"
-// import {tile} from "@/models/tile.js"
+import {Tile} from "@/models/tile.js"
 
 export default {
   name: "checkerBoard",
@@ -111,7 +95,7 @@ export default {
     },
   },
   created() {
-    // Assign all the pieces
+    // Assign all the pieces in the svg to pieces[]
     for ( let i = 1 ; i <= 20 ; i++){
       this.pieces.push( Piece.createPieces('piece'+i ) )
     }
@@ -119,6 +103,11 @@ export default {
       this.pieces.push( Piece.createPieces('piece'+i ) )
     }
     console.log(this.pieces)
+    // Assign all the tiles in the svg to tiles[]
+    for ( let i = 1 ; i <= 100 ; i++){
+      this.tiles.push( Tile.createTiles(i, this.tiles) )
+    }
+    console.log(this.tiles)
   }
 }
 </script>

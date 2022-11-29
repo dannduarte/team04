@@ -9,6 +9,7 @@ export class Piece {
     allowedToMove = true;
     player; // = which player's piece it is
     king = false; // = werther the piece is king
+    pieceClass; // the class in the DOM (black/white)
 
     constructor(element = null, position = null) {
         this.element = element;
@@ -22,33 +23,32 @@ export class Piece {
         let idNumber = pId.replace('piece','');
         const rowNumber = Math.ceil((2*idNumber)/10);
         // Calculate the x and y values for the piece
+        let y = -2 + (rowNumber*4);
         let x;
-        const y = -2 + (rowNumber*4);
         let multiplier; // This multiplier is used to determine the nth place of the piece in the row
         if(idNumber%5=== 0){
             multiplier = 5;
         } else {
             multiplier = idNumber%5;
         }
-
+        // The pieces skip places every row because the checker pattern
         if ( rowNumber%2===1) {
             x =  6 + (8*(multiplier-1)); // Odd rows
         } else {
             x =  2 + (8*(multiplier-1)); // Even rows
         }
-        console.log(rowNumber)
 
-        // :cx="6 + (8*(i-1)) + 'vw'" cy="2vw"
-        // :cx="2 + (8*(i-1)) + 'vw'" cy="6vw"
-        // :cx="6 + (8*(i-1)) + 'vw'" cy="10vw"
-        // :cx="2 + (8*(i-1)) + 'vw'" cy="14vw"
-
-        let newPiece = new Piece(pId,[x,y]);
+        // Create the new piece with the given pId and the calculated x and y
+        let newPiece = new Piece(pId,[x + 'vw',y + 'vw']);
 
         if ( idNumber <= 20 ) { // Player 1, black, has piece 1 to 20
             newPiece.player = 1;
-        } else if (idNumber > 20) { // Player 2, black, has piece 21 to 40
+            newPiece.pieceClass = "bPiece"
+        } else if (idNumber > 20) { // Player 2, white, has piece 21 to 40
             newPiece.player = 2;
+            newPiece.pieceClass = "wPiece"
+            // Between the black and white pieces there are two empty rows therefore add 8 to y
+            newPiece.position = [x + 'vw',(y+8) + 'vw']
         }
 
         return newPiece;
