@@ -3,7 +3,6 @@
     <div class="info">
       <h1>Checkers</h1>
       <hr>
-      <p>Made by codethejason for <a href="http://fossasia.org">FOSSASIA</a> 2015.</p>
     </div>
     <div class="stats">
       <h2>Game Statistics</h2>
@@ -57,11 +56,31 @@
 <!--    </label>-->
   </label>
 
+  <!-- The game board -->
   <svg width="40.4vw" height="40.4vw">
-    <rect v-for="(tile,index) of tiles" :key="index" :class="tile.class" class="square" :x="tile.position[0]" :y="tile.position[1]" :id="tile.element"/>
-    <circle v-for="(piece,index) of pieces" :key="index" :class="piece.pieceClass" :cx="piece.position[0]" :cy="piece.position[1]" :id="piece.element"/>
+    <rect v-for="(tile,index) of tiles"
+          :key="index"
+          :class="tile.class"
+          :x="tile.position[0]"
+          :y="tile.position[1]"
+          :id="tile.element"
+          @click="movePiece(tile)"
+          width="4vw"
+          height="4vw"
+    />
+    <circle v-for="(piece,index) of pieces"
+            :key="index"
+            :class="[
+                piece.pieceColor,
+                {selected: this.selectedPiece === piece},
+                {king: piece.king === true}]"
+            :cx="piece.position[0]"
+            :cy="piece.position[1]"
+            :id="piece.element"
+            r="1.5vw"
+            @click="selectPiece(piece)"
+    />
   </svg>
-
 </template>
 
 <script>
@@ -72,42 +91,49 @@ export default {
   name: "checkerBoard",
   data() {
     return {
-      gameBoard: [
-        [0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
-        [1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
-        [0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
-        [1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 2, 0, 2, 0, 2, 0, 2, 0, 2],
-        [2, 0, 2, 0, 2, 0, 2, 0, 2, 0],
-        [0, 2, 0, 2, 0, 2, 0, 2, 0, 2],
-        [2, 0, 2, 0, 2, 0, 2, 0, 2, 0]
-      ],
       pieces: [],
       tiles: [],
+      selectedPiece: null
     }
   },
   methods: {
     // distance formula
-    dist(x1, y1, x2, y2) {
-      return Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2));
+    // dist(x1, y1, x2, y2) {
+    //   return Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2));
+    // },
+    selectPiece(piece) {
+      if(piece != null && piece !== this.selectedPiece) {
+        this.selectedPiece = piece;
+      } else {
+        this.selectedPiece = null;
+      }
     },
+    movePiece(tile){
+      if (tile.class === "white") {
+        console.log("White can't be selected")
+      } else if (this.selectedPiece === null) {
+        console.log("No piece selected")
+      } else {
+        // Move piece
+        this.selectedPiece.movePiece(tile, this.pieces);
+        // Deselect piece
+        this.selectedPiece = null;
+      }
+    }
   },
   created() {
-    // Assign all the pieces in the svg to pieces[]
+    // Initiate the pieces and the board
+    // Create the pieces in pieces[]
     for ( let i = 1 ; i <= 20 ; i++){
       this.pieces.push( Piece.createPieces('piece'+i ) )
     }
     for ( let i = 21 ; i <= 40 ; i++){
       this.pieces.push( Piece.createPieces('piece'+i ) )
     }
-    console.log(this.pieces)
-    // Assign all the tiles in the svg to tiles[]
+    // Create the tiles in tiles[] for the board
     for ( let i = 1 ; i <= 100 ; i++){
       this.tiles.push( Tile.createTiles(i, this.tiles) )
     }
-    console.log(this.tiles)
   }
 }
 </script>
@@ -118,20 +144,14 @@ svg {
   position: absolute;
   left: 30vw;
 }
-circle {
-  r: 1.5vw;
-}
-.square {
-  width: 4vw;
-  height: 4vw;
-}
+/*The styles of the tiles. These are added when initiated*/
 .black {
   fill: rgb(50, 50, 68);
 }
 .white {
   fill: rgb(111, 119, 164);
 }
-
+/*The styles of the pieces. These are added when initiated*/
 .wPiece {
   fill: #8d91ab;
 }
@@ -139,6 +159,13 @@ circle {
   fill: #52526e;
 }
 .none {
-  fill: none;
+  display: none;
+}
+.selected {
+  filter: drop-shadow(0px 0px 5px rgba(255, 255, 255, 0.9));
+}
+.king {
+  stroke: gold;
+  stroke-width: 2px;
 }
 </style>
