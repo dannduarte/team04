@@ -140,14 +140,6 @@ export class Piece {
                     this.assignPosition(toTileX + 2, toTileY + 2);
                 }
             }
-
-            // ------------------   KING    ------------------
-            // Makes the piece king when it reaches the other side
-            if(toTileY === 0 && this.pieceColor.includes("wPiece") && this.king !== true) {
-                this.king = true;
-            } else if(toTileY === 36 && this.pieceColor.includes("bPiece") && this.king !== true) {
-                this.king = true;
-            }
         }
         // If the tile is in jump range
         else if (inRange === "maybeJump") {
@@ -169,6 +161,13 @@ export class Piece {
                 // Move the played piece
                 this.assignPosition(toTileX + 2, toTileY + 2);
             }
+        }
+        // ------------------   KING    ------------------
+        // Makes the piece king when it reaches the other side
+        if(toTileY === 0 && this.pieceColor.includes("wPiece") && this.king !== true) {
+            this.king = true;
+        } else if(toTileY === 36 && this.pieceColor.includes("bPiece") && this.king !== true) {
+            this.king = true;
         }
     }
 }
