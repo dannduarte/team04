@@ -93,16 +93,22 @@ export default {
     return {
       pieces: [],
       tiles: [],
-      selectedPiece: null
+      selectedPiece: null,
+      playerAtTurn: 2 // Standard: White starts
     }
   },
   methods: {
     selectPiece(piece) {
-      if(piece != null && piece !== this.selectedPiece) {
-        this.selectedPiece = piece;
-      } else {
-        this.selectedPiece = null;
+      // Look werther the piece selected is from the player who's it is
+      console.log(piece.player)
+      if (this.playerAtTurn === piece.player) {
+        if(piece !== this.selectedPiece) {
+          this.selectedPiece = piece;
+        } else {
+          this.selectedPiece = null;
+        }
       }
+
     },
     movePiece(tile){
       if (tile.class === "white") {
@@ -114,6 +120,12 @@ export default {
         this.selectedPiece.movePiece(tile, this.pieces);
         // Deselect piece
         this.selectedPiece = null;
+        // The other player gets the turn
+        if (this.playerAtTurn === 1){
+          this.playerAtTurn = 2
+        } else {
+          this.playerAtTurn = 1
+        }
       }
     }
   },
