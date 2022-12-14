@@ -87,7 +87,6 @@ export class Piece {
         }
     }
 
-
     // Checks werther there is a piece with the same coordinates
     // If that's te case; return false, otherwise return; true
     tileFree(selectedTile, pieces) {
@@ -113,10 +112,11 @@ export class Piece {
     // ------------------   MOVE    ------------------
     // Move the piece
     movePiece(toTile, pieces) {
+        let isMoved = false;
         // when false the tile cannot be chosen because another piece is there
         // when true the tile can be chosen
         if (!this.tileFree(toTile, pieces)) {
-            return
+            return isMoved
         }
 
         // Extract de numbers from the position
@@ -139,6 +139,7 @@ export class Piece {
                 } else if (this.pieceColor === "wPiece" && toTileY < pieceY) { // white may only go up
                     this.assignPosition(toTileX + 2, toTileY + 2);
                 }
+                isMoved = true;
             }
         }
         // If the tile is in jump range
@@ -160,8 +161,10 @@ export class Piece {
                 pieces.splice(indexToBeatGame, 1) // Only splice the piece at the given index
                 // Move the played piece
                 this.assignPosition(toTileX + 2, toTileY + 2);
+                isMoved = true;
             }
         }
+
         // ------------------   KING    ------------------
         // Makes the piece king when it reaches the other side
         if(toTileY === 0 && this.pieceColor.includes("wPiece") && this.king !== true) {
@@ -169,5 +172,8 @@ export class Piece {
         } else if(toTileY === 36 && this.pieceColor.includes("bPiece") && this.king !== true) {
             this.king = true;
         }
+
+        return isMoved
+
     }
 }

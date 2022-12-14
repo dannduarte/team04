@@ -99,8 +99,7 @@ export default {
   },
   methods: {
     selectPiece(piece) {
-      // Look werther the piece selected is from the player who's it is
-      console.log(piece.player)
+      // Look werther the piece selected is from the player who it is
       if (this.playerAtTurn === piece.player) {
         if(piece !== this.selectedPiece) {
           this.selectedPiece = piece;
@@ -108,7 +107,6 @@ export default {
           this.selectedPiece = null;
         }
       }
-
     },
     movePiece(tile){
       if (tile.class === "white") {
@@ -117,15 +115,19 @@ export default {
         console.log("No piece selected")
       } else {
         // Move piece
-        this.selectedPiece.movePiece(tile, this.pieces);
+        const isMoved = this.selectedPiece.movePiece(tile, this.pieces);
+
+        // If the piece has been moved the turn is given to the opponent
+        if (isMoved === true) {
+          if (this.playerAtTurn === 1){
+            this.playerAtTurn = 2
+          } else {
+            this.playerAtTurn = 1
+          }
+        }
+
         // Deselect piece
         this.selectedPiece = null;
-        // The other player gets the turn
-        if (this.playerAtTurn === 1){
-          this.playerAtTurn = 2
-        } else {
-          this.playerAtTurn = 1
-        }
       }
     }
   },
