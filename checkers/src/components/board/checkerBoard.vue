@@ -1,74 +1,62 @@
 <template>
-  <div class="column">
-    <div class="info">
-      <h1>Checkers</h1>
-      <hr>
-    </div>
-    <div class="stats">
-      <h2>Game Statistics</h2>
-      <div class="wrapper">
-        <div id="player1">
-          <h3>Player 1 (Top)</h3>
-        </div>
-        <div id="player2">
-          <h3>Player 2 (Bottom)</h3>
-        </div>
-      </div>
-      <div class="clearfix"></div>
-      <div class="turn"></div>
-      <span id="winner"></span>
-      <button id="cleargame">Reset Game</button>
-    </div>
-  </div>
-  <div class="column">
-    <div id="board">
-      <div class="tiles"></div>
-      <div class="pieces">
-        <div class="player1pieces">
-        </div>
-        <div class="player2pieces">
-        </div>
-      </div>
-    </div>
-  </div>
-  <!--  Rules modal popup-->
-  <label for="my-modal-4" class="btn modal-button bg-primary hover:bg-primary-focus ml-20">Rules</label>
-  <input type="checkbox" id="my-modal-4" class="modal-toggle" />
-  <label for="my-modal-4" class="modal cursor-pointer">
-<!--    <label class="modal-box relative w-11/12 max-w-5xl" for="">-->
-      <h2>Rules</h2><br>
-      1. Leg het dambord zo, dat het hoekveld linksonder een donker vakje is. Er wordt op de donkere velden gedamd.<br>
-      2. Wit begint en doet de eerste zet.<br>
-      3. Een schijf wordt één vakje schuin vooruit geschoven.<br>
-      4. Een schijf kan vooruit en achteruit slaan.<br>
-      5. Een schijf die aan de overkant van het dambord komt, wordt een dam. Let op: een schijf die tijdens het slaan de overkant van het dambord passeert maar weer terug moet om nog meer schijven te slaan, blijft een schijf.<br>
-      6. Een dam wordt één of meer vakjes schuin vooruit of schuin achteruit geschoven.<br>
-      7. Een dam kan vooruit en achteruit slaan. Je hoeft de dam na de slag niet vlak achter de laatste geslagen schijf te zetten.<br>
-      8. Slaan is verplicht.<br>
-      9. Meerslag gaat voor.<br>
-      10. Als je met een dam en met een schijf evenveel stukken kunt slaan, mag je kiezen. Dus: damslag gaat niet voor!<br>
-      11. Pas na het slaan mag je de geslagen stukken van het bord pakken.<br>
-      12. Tijdens het slaan mag je niet twee keer over hetzelfde stuk. Wel twee keer over hetzelfde lege veld.<br>
-      13. Aanraken is zetten: als je een dam of schijf aanraakt waar je een reglementaire zet mee kunt doen, dan moet je met dát stuk een zet doen.<br>
-      14. Als je tegenstander een zet doet die niet volgens de spelregels is (bijvoorbeeld hij vergeet te slaan, of hij slaat te weinig stukken), dan is het sportief om dat tegen hem te zeggen en hem te laten terugzetten. Maar je mag ook gewoon doorspelen.<br>
-      15. Wie geen zet meer kan doen, heeft de partij verloren.<br>
-      16. Als niemand meer kan winnen, dan is het remise (gelijkspel). Let op: het kan ook remise zijn als jij en je tegenstander niet hetzelfde aantal stukken hebben!<br>
+<!--    <div class="hero-overlay bg-opacity-60"></div>-->
+    <!--  Rules modal popup-->
+    <label class="btn modal-button bg-primary hover:bg-primary-focus ml-20" for="my-modal-4">Rules</label>
+    <input id="my-modal-4" class="modal-toggle" type="checkbox"/>
+<!--    <label class="modal cursor-pointer" for="my-modal-4">-->
+<!--      &lt;!&ndash;    <label class="modal-box relative w-11/12 max-w-5xl" for="">&ndash;&gt;-->
+<!--      <h2>Rules</h2><br>-->
+<!--      1. Leg het dambord zo, dat het hoekveld linksonder een donker vakje is. Er wordt op de donkere velden gedamd.<br>-->
+<!--      2. Wit begint en doet de eerste zet.<br>-->
+<!--      3. Een schijf wordt één vakje schuin vooruit geschoven.<br>-->
+<!--      4. Een schijf kan vooruit en achteruit slaan.<br>-->
+<!--      5. Een schijf die aan de overkant van het dambord komt, wordt een dam. Let op: een schijf die tijdens het slaan de overkant van het dambord passeert maar weer terug moet om nog meer schijven te slaan, blijft een schijf.<br>-->
+<!--      6. Een dam wordt één of meer vakjes schuin vooruit of schuin achteruit geschoven.<br>-->
+<!--      7. Een dam kan vooruit en achteruit slaan. Je hoeft de dam na de slag niet vlak achter de laatste geslagen schijf te zetten.<br>-->
+<!--      8. Slaan is verplicht.<br>-->
+<!--      9. Meerslag gaat voor.<br>-->
+<!--      10. Als je met een dam en met een schijf evenveel stukken kunt slaan, mag je kiezen. Dus: damslag gaat niet-->
+<!--      voor!<br>-->
+<!--      11. Pas na het slaan mag je de geslagen stukken van het bord pakken.<br>-->
+<!--      12. Tijdens het slaan mag je niet twee keer over hetzelfde stuk. Wel twee keer over hetzelfde lege veld.<br>-->
+<!--      13. Aanraken is zetten: als je een dam of schijf aanraakt waar je een reglementaire zet mee kunt doen, dan moet je-->
+<!--      met dát stuk een zet doen.<br>-->
+<!--      14. Als je tegenstander een zet doet die niet volgens de spelregels is (bijvoorbeeld hij vergeet te slaan, of hij-->
+<!--      slaat te weinig stukken), dan is het sportief om dat tegen hem te zeggen en hem te laten terugzetten. Maar je mag-->
+<!--      ook gewoon doorspelen.<br>-->
+<!--      15. Wie geen zet meer kan doen, heeft de partij verloren.<br>-->
+<!--      16. Als niemand meer kan winnen, dan is het remise (gelijkspel). Let op: het kan ook remise zijn als jij en je-->
+<!--      tegenstander niet hetzelfde aantal stukken hebben!<br>-->
+<!--      &lt;!&ndash;    </label>&ndash;&gt;-->
 <!--    </label>-->
-  </label>
 
-  <!-- The game board -->
-  <svg width="40.4vw" height="40.4vw">
-    <rect v-for="(tile,index) of tiles"
-          :key="index"
-          :class="tile.class"
-          :x="tile.position[0]"
-          :y="tile.position[1]"
-          :id="tile.element"
+    <!-- Timer and who has the turn -->
+      <div class="flex w-full" style="width: 40.4vw; position: absolute; left: 30vw;">
+        <div class="grid flex-grow card bg-base-300 rounded-box place-items-center">
+          <span :class="{hasTurn : this.playerAtTurn === 2 }" class="stat-value"
+                style="display:inline">Player 1: Dark</span>
+          Score: {{ scorePlayer1 }}
+        </div>
+        <div class="divider divider-horizontal">{{ timer }}</div>
+        <div class="grid h-20 flex-grow card bg-base-300 rounded-box place-items-center">
+          <span :class="{hasTurn : this.playerAtTurn === 1 }" class="stat-value"
+                style="display:inline">Player 2: Light</span>
+          Score: {{ scorePlayer2 }}
+        </div>
+      </div>
+    <!-- The game board -->
+    <svg height="40.4vw" width="40.4vw">
+      <rect v-for="(tile,index) of tiles"
+            :id="tile.element"
+            :key="index"
+            :class="tile.class"
+            :x="tile.position[0]"
+            :y="tile.position[1]"
           @click="movePiece(tile)"
           width="4vw"
           height="4vw"
-    />
-    <circle v-for="(piece,index) of pieces"
+      />
+      <circle v-for="(piece,index) of pieces"
             :key="index"
             :class="[
                 piece.pieceColor,
@@ -79,8 +67,12 @@
             :id="piece.element"
             r="1.5vw"
             @click="selectPiece(piece)"
-    />
-  </svg>
+      />
+    </svg>
+    <div v-if="gameFinished" id="winnerMessage" class="alert alert-success shadow-lg">
+      There is a winner!!!!
+    </div>
+
 </template>
 
 <script>
@@ -94,14 +86,88 @@ export default {
       pieces: [],
       tiles: [],
       selectedPiece: null,
-      playerAtTurn: 2 // Standard: White starts
+      playerAtTurn: 2, // Standard: White starts,
+      timer: 30
+    }
+  },
+  computed: {
+    piecesCountBlack: {
+      get() {
+        const piecesAmount = this.pieces.length;
+        let blackCount = 0;
+
+        // Count all the pieces of player 1 (black)
+        for (let i = 0; i < piecesAmount; i++) {
+          const player = this.pieces[i].player;
+          if (player === 1) {
+            blackCount += 1;
+          }
+        }
+
+        return blackCount
+      }
+    },
+    piecesCountWhite: {
+      get() {
+        const piecesAmount = this.pieces.length;
+        let whiteCount = 0;
+
+        // Count all the pieces of player 2 (white)
+        for (let i = 0; i < piecesAmount; i++) {
+          const player = this.pieces[i].player;
+          if (player === 2) {
+            whiteCount += 1;
+          }
+        }
+
+        return whiteCount
+      }
+    },
+    scorePlayer1() {
+      return (20 - this.piecesCountWhite)
+    },
+    scorePlayer2() {
+      return (20 - this.piecesCountBlack)
+    },
+    gameFinished: {
+      //
+      get() {
+        return this.piecesCountWhite === 0 || this.piecesCountBlack === 0;
+      }
+    }
+  },
+  watch: {
+    timer: {
+      handler(value) {
+        // This is the actual timer
+        if (value > 0) {
+          setTimeout(() => {
+            this.timer--;
+          }, 1000);
+        }
+
+        // Switch player when the timer hits 0
+        if (this.timer === 0) {
+          if (this.playerAtTurn === 1) {
+            this.playerAtTurn = 2
+          } else {
+            this.playerAtTurn = 1
+          }
+          // Set the timer back to 30 seconds
+          this.timer = 30;
+          // Deselect piece
+          this.selectedPiece = null;
+        }
+
+      },
+      immediate: true // This ensures the watcher is triggered upon creation
     }
   },
   methods: {
     selectPiece(piece) {
       // Look werther the piece selected is from the player who it is
       if (this.playerAtTurn === piece.player) {
-        if(piece !== this.selectedPiece) {
+        if (piece !== this.selectedPiece) {
           this.selectedPiece = piece;
         } else {
           this.selectedPiece = null;
@@ -119,11 +185,13 @@ export default {
 
         // If the piece has been moved the turn is given to the opponent
         if (isMoved === true) {
-          if (this.playerAtTurn === 1){
+          if (this.playerAtTurn === 1) {
             this.playerAtTurn = 2
           } else {
             this.playerAtTurn = 1
           }
+          // reset the timer to 30 seconds
+          this.timer = 30;
         }
 
         // Deselect piece
@@ -168,14 +236,29 @@ svg {
 .bPiece{
   fill: #52526e;
 }
+
 .none {
   display: none;
 }
+
 .selected {
   filter: drop-shadow(0px 0px 5px rgba(255, 255, 255, 0.9));
 }
+
 .king {
   stroke: gold;
   stroke-width: 2px;
+}
+
+.hasTurn {
+  font-weight: bold;
+  font-size: large;
+}
+
+#winnerMessage {
+  width: 30vw;
+  position: absolute;
+  left: 35vw;
+  top: 45vh;
 }
 </style>
