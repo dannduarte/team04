@@ -1,49 +1,45 @@
 <template>
-<!--    <div class="hero-overlay bg-opacity-60"></div>-->
-    <!--  Rules modal popup-->
-    <label class="btn modal-button bg-primary hover:bg-primary-focus ml-20" for="my-modal-4">Rules</label>
-    <input id="my-modal-4" class="modal-toggle" type="checkbox"/>
-<!--    <label class="modal cursor-pointer" for="my-modal-4">-->
-<!--      &lt;!&ndash;    <label class="modal-box relative w-11/12 max-w-5xl" for="">&ndash;&gt;-->
-<!--      <h2>Rules</h2><br>-->
-<!--      1. Leg het dambord zo, dat het hoekveld linksonder een donker vakje is. Er wordt op de donkere velden gedamd.<br>-->
-<!--      2. Wit begint en doet de eerste zet.<br>-->
-<!--      3. Een schijf wordt één vakje schuin vooruit geschoven.<br>-->
-<!--      4. Een schijf kan vooruit en achteruit slaan.<br>-->
-<!--      5. Een schijf die aan de overkant van het dambord komt, wordt een dam. Let op: een schijf die tijdens het slaan de overkant van het dambord passeert maar weer terug moet om nog meer schijven te slaan, blijft een schijf.<br>-->
-<!--      6. Een dam wordt één of meer vakjes schuin vooruit of schuin achteruit geschoven.<br>-->
-<!--      7. Een dam kan vooruit en achteruit slaan. Je hoeft de dam na de slag niet vlak achter de laatste geslagen schijf te zetten.<br>-->
-<!--      8. Slaan is verplicht.<br>-->
-<!--      9. Meerslag gaat voor.<br>-->
-<!--      10. Als je met een dam en met een schijf evenveel stukken kunt slaan, mag je kiezen. Dus: damslag gaat niet-->
-<!--      voor!<br>-->
-<!--      11. Pas na het slaan mag je de geslagen stukken van het bord pakken.<br>-->
-<!--      12. Tijdens het slaan mag je niet twee keer over hetzelfde stuk. Wel twee keer over hetzelfde lege veld.<br>-->
-<!--      13. Aanraken is zetten: als je een dam of schijf aanraakt waar je een reglementaire zet mee kunt doen, dan moet je-->
-<!--      met dát stuk een zet doen.<br>-->
-<!--      14. Als je tegenstander een zet doet die niet volgens de spelregels is (bijvoorbeeld hij vergeet te slaan, of hij-->
-<!--      slaat te weinig stukken), dan is het sportief om dat tegen hem te zeggen en hem te laten terugzetten. Maar je mag-->
-<!--      ook gewoon doorspelen.<br>-->
-<!--      15. Wie geen zet meer kan doen, heeft de partij verloren.<br>-->
-<!--      16. Als niemand meer kan winnen, dan is het remise (gelijkspel). Let op: het kan ook remise zijn als jij en je-->
-<!--      tegenstander niet hetzelfde aantal stukken hebben!<br>-->
-<!--      &lt;!&ndash;    </label>&ndash;&gt;-->
-<!--    </label>-->
+  <!--    <div class="hero-overlay bg-opacity-60"></div>-->
+  <!--  Rules modal popup-->
+  <label class="btn modal-button bg-primary hover:bg-primary-focus ml-20" for="my-modal-4">Rules</label>
+  <input id="my-modal-4" class="modal-toggle" type="checkbox"/>
+  <label class="modal cursor-pointer" for="my-modal-4">
+    <label class="modal-box relative w-11/12 max-w-5xl" for="">
+      Starting of the game:<br>
+      The player with the light color starts the game.<br>
+      <br>
+      Moving the pieces:<br>
+      Pieces can only be put on black tiles.<br>
+      That is why pieces move diagonally.<br>
+      Pieces can move forward one tile at a time.<br>
+      Pieces can only move towards their opponent and it can only be placed on a tile that not is occupied.<br>
+      <br>
+      Capturing pieces:<br>
+      To capture a piece, your piece jumps over one of the opponent's pieces.<br>
+      Your piece will land on the other side of the opponent's piece.<br>
+      This must be done in a straight diagonal line and the landing tile must be empty.<br>
+      If there is a possibility to capture another piece after your piece has landed than you must do so.<br>
+      <br>
+      King:<br>
+      When a piece reaches the other side of the board thad piece becomes a king.<br>
+      A king can also move backwards and can move multiple tiles as long as it is in one diagonal line.<br>
+    </label>
+  </label>
 
-    <!-- Timer and who has the turn -->
-      <div class="flex w-full" style="width: 40.4vw; position: absolute; left: 30vw;">
-        <div class="grid flex-grow card bg-base-300 rounded-box place-items-center">
+  <!-- Timer and who has the turn -->
+  <div class="flex w-full" style="width: 40.4vw; position: absolute; left: 30vw; min-width: 450px">
+    <div class="grid flex-grow card bg-base-300 rounded-box place-items-center">
           <span :class="{hasTurn : this.playerAtTurn === 2 }" class="stat-value"
                 style="display:inline">Player 1: Dark</span>
-          Score: {{ scorePlayer1 }}
-        </div>
-        <div class="divider divider-horizontal">{{ timer }}</div>
-        <div class="grid h-20 flex-grow card bg-base-300 rounded-box place-items-center">
+      Score: {{ scorePlayer1 }}
+    </div>
+    <div class="divider divider-horizontal">{{ timer }}</div>
+    <div class="grid h-20 flex-grow card bg-base-300 rounded-box place-items-center">
           <span :class="{hasTurn : this.playerAtTurn === 1 }" class="stat-value"
                 style="display:inline">Player 2: Light</span>
-          Score: {{ scorePlayer2 }}
-        </div>
-      </div>
+      Score: {{ scorePlayer2 }}
+    </div>
+  </div>
     <!-- The game board -->
     <svg height="40.4vw" width="40.4vw">
       <rect v-for="(tile,index) of tiles"
