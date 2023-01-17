@@ -198,10 +198,7 @@ export default {
   created() {
     // Initiate the pieces and the board
     // Create the pieces in pieces[]
-    for ( let i = 1 ; i <= 20 ; i++){
-      this.pieces.push( Piece.createPieces('piece'+i ) )
-    }
-    for ( let i = 21 ; i <= 40 ; i++){
+    for ( let i = 1 ; i <= 40 ; i++){
       this.pieces.push( Piece.createPieces('piece'+i ) )
     }
     // Create the tiles in tiles[] for the board
