@@ -83,7 +83,8 @@ export default {
       tiles: [],
       selectedPiece: null,
       playerAtTurn: 2, // Standard: White starts,
-      timer: 30
+      timer: 30,
+      timeout:""
     }
   },
   computed: {
@@ -137,9 +138,11 @@ export default {
       handler(value) {
         // This is the actual timer
         if (value > 0) {
-          setTimeout(() => {
+          this.timeout = setTimeout(() => {
             this.timer--;
           }, 1000);
+        } else {
+          clearTimeout(this.timeout)
         }
 
         // Switch player when the timer hits 0
@@ -150,6 +153,7 @@ export default {
             this.playerAtTurn = 1
           }
           // Set the timer back to 30 seconds
+          clearTimeout(this.timeout)
           this.timer = 30;
           // Deselect piece
           this.selectedPiece = null;
@@ -187,6 +191,7 @@ export default {
             this.playerAtTurn = 1
           }
           // reset the timer to 30 seconds
+          clearTimeout(this.timeout)
           this.timer = 30;
         }
 
@@ -214,6 +219,7 @@ svg {
   border: 0.2vw #0078d5 solid;
   position: absolute;
   left: 30vw;
+  top: 215px;
 }
 /*The styles of the tiles. These are added when initiated*/
 .black {
